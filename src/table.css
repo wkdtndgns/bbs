@@ -1,0 +1,13 @@
+tbody>tr:hover{
+    background: rgba(131, 181, 193, 0.87);
+    cursor:pointer;
+
+}
+table{
+text-align: center;
+}
+
+th:first-child{
+    text-align: center;
+    padding-left: 0px;
+}
