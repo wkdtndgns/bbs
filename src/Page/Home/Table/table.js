@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import './table.css';
 import React, { Component } from 'react';
 import axios from 'axios';
-import { URL } from "./url.js";
+import { URL } from "../../url.js";
 
 const styles = theme => ({
   root: {
