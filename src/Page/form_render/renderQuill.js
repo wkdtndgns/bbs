@@ -28,20 +28,13 @@ function renderQuill({input, size}) {
     ]
 
     return(
-        <div className="w3-container" style={{ width : window.innerWidth <= 420 ? '95%' : '60%' }}>
+        <div className="w3-container" style={{ width : window.innerWidth <= 420 ? '100%' : '80%' }}>
             <ReactQuill
                 theme='snow'
                 {...input}
                 modules={_quillModules}
                 formats={_quillFormats}
-                onChange={(newValue, delta, source) => {
-                    if(source==='user'){
-                        input.onChange(newValue);
-                    }
-                }}
-                onBlur={(range, source, quill) => {
-                    input.onBlur(quill.getHTML());
-                }}
+          
                 style={{height : `${size}px`}}
             />
             <br/>

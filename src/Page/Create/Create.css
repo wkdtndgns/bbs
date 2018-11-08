@@ -1,11 +1,19 @@
 .title{
-    width: 80%;
+    width: 70%;
+    margin-top: 2%;
+    margin-bottom: 3%;
 }
 .form{
     width: 80%;
 }
-.MuiInputBase-root-14.MuiInput-root-1.MuiInput-underline-5{
-    width: 70%;
-    margin-top: 2%;
-    margin-bottom: 3%;
+
+.w3-container{
+    width: 100%;
+}
+.back{
+    margin-right: 90%;
+}
+.create{
+    margin-top :3%;
+    margin-left: 83%;
 }
