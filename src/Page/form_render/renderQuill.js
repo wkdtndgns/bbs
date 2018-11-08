@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
-function renderQuill({input, size, meta: { error}}) {
+
+
+function renderQuill({input, size}) {
     const _quillModules = {
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
@@ -44,10 +45,6 @@ function renderQuill({input, size, meta: { error}}) {
                 style={{height : `${size}px`}}
             />
             <br/>
-            {
-                error &&
-                <span className="w3-tag w3-round-large w3-pale-red"><ReportProblemIcon /> {error}</span>
-            }
         </div>
     );
 }

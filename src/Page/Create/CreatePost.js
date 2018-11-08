@@ -10,24 +10,7 @@ import { withRouter } from 'react-router-dom';
 import {reduxForm, Field, SubmissionError} from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-    form: {
-        width: '100%',
-        marginTop: theme.spacing.unit,
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: (window.innerWidth >= 450) ? 420 : 300,
-    },
-    avatar: {
-        margin: theme.spacing.unit,
-        backgroundColor: theme.palette.secondary.main,
-    },
-    leftIcon: {
-        marginRight: theme.spacing.unit,
-    }
-});
+
 const Container = styled.div`
 
   display: flex;
@@ -76,11 +59,11 @@ class CreatePost extends Component {
           <form onSubmit={this.createPost.bind(this)}>
              <h3> 게시글 { this.state.postId === 0 ? '추가' : '수정'}</h3>
                  <p> 게시판에 글을 { this.state.postId === 0 ? '추가' : '수정'} 합니다.</p>
-                 <Input name="title"  type="text" class="title"
+                 <Input name="title"  type="text"
                                 label="게시물 제목" placeholder="게시물의 제목을 입력하세요." />
 
                     <div>
-                    <TextField name="context" component={renderQuill} size={400} />
+                    <TextField name="context"  component={renderQuill} size={400} />
                     </div>
             </form>
           </div>
