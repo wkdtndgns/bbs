@@ -31,7 +31,7 @@ class SimpleTable extends Component {
   }
   
   componentDidMount() {
-    axios.get(`${URL}/selectAPI.php`).then(
+    axios.get(`${URL}/SelectAllPostApi.php`).then(
       r => { this.setState({ data : r.data });
 
     }   

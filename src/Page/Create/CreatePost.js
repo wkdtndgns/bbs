@@ -106,9 +106,20 @@ class CreatePost extends Component {
                 "title" : this.state.title,
             "writer" : this.state.writer,
             "context": this.state.context});
-            axios.post(`${URL}/createApi.php`,
+
+            axios.post(`${URL}/CreatePostApi.php`,
                data
-            ).then( response => { console.log(response) });
+            ).then( response => {
+                if(response.status===200){
+                    alert("게시글이 추가되었습니다.");  
+                    this.props.history.push('/')
+
+                }
+                else{
+                    alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
+                }
+            });
+            event.preventDefault();
         }
 
 
