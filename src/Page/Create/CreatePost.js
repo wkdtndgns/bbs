@@ -10,6 +10,9 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {reduxForm, Field, SubmissionError} from 'redux-form';
 import CheckIcon from '@material-ui/icons/Check';
 import Button from '@material-ui/core/Button';
+import {Create_Post} from '../../action/action_Create';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Container = styled.div`
 
@@ -20,35 +23,96 @@ const Container = styled.div`
   margin:5%;
 `;
 
-function validate(values){
+function validate(title,context,writer){
     var errors = {};
     var hasErrors = false;
-    if(!values.title || values.title.trim() === ''){
+    if(!title === ''){
         errors.title = '게시물 제목을 입력하세요.';
         hasErrors = true;
     }
 
-    if(!values.context || values.context.trim() === ''){
+    if(!context  === ''){
         errors.context = '게시물 내용을 입력하세요.';
         hasErrors = true;
     }
+    if(!writer  === ''){
+        errors.writer = '게시물 내용을 입력하세요.';
+        hasErrors = true;
+    }
+
     return hasErrors && errors;
 }
+
+
 
 class CreatePost extends Component {
 
     constructor(props){
         super(props);
-        this.state = { type : null, postId : 0 };
+        this.state = { postId : 0, writer: '', title: '', context:'' 
+     };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChangeContext = this.handleChangeContext.bind(this);
     }
-    createPost(){
-        var context= document.getElementsByTagName("input").context.value;    
-            axios.post(`${URL}/create`,{
-              "teamId" : this.state.teamId,
-           "writer" : this.state.name,
-               "context": context
-            }).then();
-          }
+    
+
+    handleChange(event) {
+ 
+        switch (event.target.name) {
+            case 'writer':
+                    this.setState({writer:event.target.value}) ;                
+                break;
+            case 'title':
+                this.setState({title:event.target.value}) ;                
+            break;
+            default:
+                break;
+        }
+
+    }
+    handleChangeContext(event) {
+    
+        this.setState({context:event}) ; 
+ 
+    }
+
+     handleSubmit(event) {
+
+        var errors = {};
+        var hasErrors = false;
+        if(this.state.title === ''){
+            errors = '게시물 제목을 입력하세요.';
+            hasErrors = true;
+        }
+    
+        if(this.state.context  === ''){
+            errors = '게시물 내용을 입력하세요.';
+            hasErrors = true;
+        }
+        if(this.state.writer  === ''){
+            errors = '작성자을 입력하세요.';
+            hasErrors = true;
+        }
+
+        if(hasErrors===true){
+            alert(errors);
+            event.preventDefault();
+        }
+        else {
+  
+            const data = JSON.stringify({  
+                "title" : this.state.title,
+            "writer" : this.state.writer,
+            "context": this.state.context});
+            axios.post(`${URL}/createApi.php`,
+               data
+            ).then( response => { console.log(response) });
+        }
+
+
+    }
 
     render() {
         const { classes } = this.props;
@@ -63,22 +127,22 @@ class CreatePost extends Component {
             </div>
           <div class="form">
           
-          <form onSubmit={this.createPost.bind(this)}>
+          <form onSubmit={this.handleSubmit}>
              <h3> 게시글 { this.state.postId === 0 ? '추가' : '수정'}</h3>
                  <p> 게시판에 글을 { this.state.postId === 0 ? '추가' : '수정'} 합니다.</p>
                  <div class ="writer">
                  <Input name="writer"  type="text"
-                                label="작성자" placeholder="작성자를 입력하세요." />
+                                label="작성자" placeholder="작성자를 입력하세요." onChange={this.handleChange}/>
                     </div>
                  <div class ="title">
                  <Input name="title"  type="text"
-                                label="게시물 제목" placeholder="게시물의 제목을 입력하세요." fullWidth={true}/>
+                                label="게시물 제목" placeholder="게시물의 제목을 입력하세요." fullWidth={true}  onChange={this.handleChange}/>
                     </div>
-                     <div>
-                    <TextField name="context"  component={renderQuill} size={400} />
+                    <div className="w3-container" style={{ width : window.innerWidth <= 420 ? '100%' : '80%' }}>
+                     <ReactQuill name="context"  onChange={this.handleChangeContext} size={400}/>
                     </div>
                     <div class="create">
-                     <Button variant="contained" type="submit" color="primary">
+                     <Button variant="contained" type="submit" color="primary" >
                             <CheckIcon/> 게시물 {(this.state.postId === 0) ? "추가" : "수정"}하기
                 </Button>
                 </div>
@@ -90,7 +154,7 @@ class CreatePost extends Component {
 }
 
 export default (reduxForm({
-    form : 'noticeForm',
+    form : 'PostForm',
     enableReinitialize : true,
     validate
 })(CreatePost));

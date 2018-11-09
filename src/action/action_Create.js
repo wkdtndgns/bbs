@@ -4,17 +4,13 @@ import {URL} from '../Page/url';
 
 export const Create_Post = 'Create_Post';
 
-export function CreatePost(postForm, postId,writer){
-    const request = postId === 0 ?
+export function CreatePost(postModel){
+    const request =
         axios({
             method : 'post',
-            url : `${URL}/post/${writer}`,
-            data : postForm
-        }) : axios({
-            method : 'put',
-            url : `${URL}/post/${postId}`,
-            data : postForm
-        });
+            url : `${URL}/createApi.php`,
+            data : postModel
+        }) ;
     return {
         type : Create_Post,
         payload : request

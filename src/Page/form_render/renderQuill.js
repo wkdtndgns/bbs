@@ -34,7 +34,14 @@ function renderQuill({input, size}) {
                 {...input}
                 modules={_quillModules}
                 formats={_quillFormats}
-          
+                onChange={(newValue, delta, source) => {
+                    if (source === 'user') {
+                      input.onChange(newValue);
+                    }
+                  }}
+                  onBlur={(range, source, quill) => {
+                    input.onBlur(quill.getHTML());
+                  }}
                 style={{height : `${size}px`}}
             />
             <br/>
