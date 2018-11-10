@@ -16,10 +16,10 @@ function SimpleAppBar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="white">
+      <AppBar position="static" color="default">
         <Toolbar>
             <img src="https://img.cafe24.com/img/simplexi/common/h3_logobottom_m.png"/>
-          <Typography variant="h5" color="black">
+          <Typography variant="h5" color="default">
                 Q&A
           </Typography>
         </Toolbar>

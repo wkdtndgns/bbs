@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import {Create_Post} from '../../action/action_Create';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import queryString from 'query-string';
 
 const Container = styled.div`
 
@@ -57,7 +58,36 @@ class CreatePost extends Component {
         this.handleChangeContext = this.handleChangeContext.bind(this);
     }
     
+    componentDidMount() {
+        const {id} = queryString.parse(this.props.location.search);  
+       
+        if(id==null){
+        }
+        else{
+            this.setState({postId:id});
 
+            const postId = JSON.stringify({  
+                "id":id});
+
+              axios.post(`${URL}/FindOnePostApi.php`,
+                  postId
+                ).then( response => {
+                  if(response.status===200){
+                     const data =response.data;
+                      this.setState({
+                          title : data[0].title, 
+                          context : data[0].context, 
+                          writer : data[0].writer                                 
+                        })
+                }
+                else{
+                    alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");       
+                }
+                });
+
+        };  
+
+    }    
     handleChange(event) {
  
         switch (event.target.name) {
@@ -78,7 +108,6 @@ class CreatePost extends Component {
     }
 
      handleSubmit(event) {
-
         var errors = {};
         var hasErrors = false;
         if(this.state.title === ''){
@@ -102,35 +131,52 @@ class CreatePost extends Component {
         else {
   
             const data = JSON.stringify({  
+                "id" : this.state.postId,
                 "title" : this.state.title,
             "writer" : this.state.writer,
             "context": this.state.context});
 
-            axios.post(`${URL}/CreatePostApi.php`,
-               data
-            ).then( response => {
-                if(response.status===200){
-                    alert("게시글이 추가되었습니다."); 
-                    this.props.history.push('/')
-                        
-                }
-                else{
-                    alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
-                }
-            });
-            event.preventDefault();
+            if(this.state.postId===0){
+                axios.post(`${URL}/CreatePostApi.php`,
+                data
+                ).then( response => {
+                    if(response.status===200){
+                        alert("게시글이 추가되었습니다."); 
+                        this.props.history.push('/')
+                            
+                    }
+                    else{
+                        alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
+                    }
+                });
+                event.preventDefault();
+            }
+            
+            else{
+                axios.post(`${URL}/UpdatePostApi.php`,
+                data
+                ).then( response => {
+                    if(response.status===200){
+                        alert("게시글이 업데이트되었습니다."); 
+                        this.props.history.push('/')                        
+                    }
+                    else{
+                        alert("오류가 발생했습니다. 게시글 업데이트가 실패했습니다. 다시 시도해주세요.");       
+                    }
+                });
+                event.preventDefault();}
+            
         }
-
-
     }
 
     render() {
         const { classes } = this.props;
+
         return (
         <Container>
             <div class="back">
             <Link to={`/`} style={{ textDecoration: 'none' }}>
-                <Button variant="contained" type="button" color="defalut">
+                <Button variant="contained" type="button" color="default">
                         뒤로가기
                 </Button>
             </Link>
@@ -142,14 +188,14 @@ class CreatePost extends Component {
                  <p> 게시판에 글을 { this.state.postId === 0 ? '추가' : '수정'} 합니다.</p>
                  <div class ="writer">
                  <Input name="writer"  type="text"
-                                label="작성자" placeholder="작성자를 입력하세요." onChange={this.handleChange}/>
+                                label="작성자" placeholder="작성자를 입력하세요." value={this.state.writer} onChange={this.handleChange}/>
                     </div>
                  <div class ="title">
                  <Input name="title"  type="text"
-                                label="게시물 제목" placeholder="게시물의 제목을 입력하세요." fullWidth={true}  onChange={this.handleChange}/>
+                                label="게시물 제목" placeholder="게시물의 제목을 입력하세요."  value={this.state.title} fullWidth={true}  onChange={this.handleChange}/>
                     </div>
                     <div className="w3-container" style={{ width : window.innerWidth <= 420 ? '100%' : '80%' }}>
-                     <ReactQuill name="context"  onChange={this.handleChangeContext} size={400}/>
+                     <ReactQuill name="context"  value={this.state.context} onChange={this.handleChangeContext} size={400}/>
                     </div>
                     <div class="create">
                      <Button variant="contained" type="submit" color="primary" >

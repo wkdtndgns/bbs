@@ -64,7 +64,7 @@ class RecipeReviewCard extends React.Component {
     const {id} = queryString.parse(this.props.props.location.search);
     const postId = JSON.stringify({  
       "id":id});
-      this.setState({id:id});
+    this.setState({id:id});
     axios.post(`${URL}/FindOnePostApi.php`,
         postId
       ).then( response => {
@@ -81,7 +81,7 @@ class RecipeReviewCard extends React.Component {
       else{
           alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");       
       }
- });
+      });
   }
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
@@ -141,7 +141,7 @@ class RecipeReviewCard extends React.Component {
             </Link>
           </IconButton>
           {
-              <Link to={`/`}>
+              <Link to={`/Create?id=${this.state.id}`}>
                 <IconButton aria-label="게시물을 수정합니다.">
                   <EditIcon />
                 </IconButton>

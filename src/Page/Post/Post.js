@@ -28,7 +28,7 @@ class Post extends Component {
       <Container>
             <div class="back">
             <Link to={`/`} style={{ textDecoration: 'none' }}>
-                <Button variant="contained" type="button" color="defalut">
+                <Button variant="contained" type="button" color="default">
                         뒤로가기
                 </Button>
             </Link>
