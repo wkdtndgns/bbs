@@ -1,4 +1,4 @@
-
+import { createHashHistory } from 'history'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,6 +11,7 @@ import './table.css';
 import React, { Component } from 'react';
 import axios from 'axios';
 import { URL } from "../../url.js";
+import {  Router, Route } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -27,7 +28,8 @@ const styles = theme => ({
 class SimpleTable extends Component {
   constructor(props){
     super(props);
-    this.state = { data : props.data, pagination : props.pagination };
+    this.state = { data : props.data };
+    
   }
   
   componentDidMount() {
@@ -37,8 +39,11 @@ class SimpleTable extends Component {
     }   
     )
   }
+
+
   render() {
-    const { classes } = this.props;
+    const { classes, indexed } = this.props;
+    
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -54,7 +59,8 @@ class SimpleTable extends Component {
         <TableBody>
           {this.state.data.map(row => {
             return (
-              <TableRow key={row.id}>
+          
+              <TableRow key={row.id} id={row.id} onClick={()=>{this.props.props.history.push(`/post?id=${row.id}`)}}>
                 <TableCell component="th" scope="row">
                   {row.title}
                 </TableCell>

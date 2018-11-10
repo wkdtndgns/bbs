@@ -73,7 +73,6 @@ class CreatePost extends Component {
 
     }
     handleChangeContext(event) {
-    
         this.setState({context:event}) ; 
  
     }
@@ -111,9 +110,9 @@ class CreatePost extends Component {
                data
             ).then( response => {
                 if(response.status===200){
-                    alert("게시글이 추가되었습니다.");  
+                    alert("게시글이 추가되었습니다."); 
                     this.props.history.push('/')
-
+                        
                 }
                 else{
                     alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
@@ -164,8 +163,4 @@ class CreatePost extends Component {
     }
 }
 
-export default (reduxForm({
-    form : 'PostForm',
-    enableReinitialize : true,
-    validate
-})(CreatePost));
+export default CreatePost;

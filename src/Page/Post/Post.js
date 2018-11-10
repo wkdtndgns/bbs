@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import Appbar from './Appbar';
-import Table from './Table/table';
 import styled from 'styled-components';
 import PlusIcon from '@material-ui/icons/PlusOne';
 import Button from '@material-ui/core/Button';
 import queryString from 'query-string';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import './home.css';
+import Card from './Card/Card.js'
 
 const Container = styled.div`
   display: flex;
@@ -16,31 +14,30 @@ const Container = styled.div`
   margin:5%;
 `;
 
-class Home extends Component {
+class Post extends Component {
   constructor(props) {
     super(props)
     this.state = { list: [],};
 
   }
+
   render() {
     const { indexed, classes } = this.props;
     return (
+
       <Container>
-      <Appbar/>
-      <div className="w3-bar-item">
-             <Link to={`/Create`} style={{ textDecoration: 'none' }}>
-                  <Button variant="contained" type="button" color="secondary">
-                       <PlusIcon /> 게시글 추가
-                  </Button>
-               </Link>
-
-
-        </div> 
-        <Table indexed={indexed} data={this.state.list} props={this.props} />
+            <div class="back">
+            <Link to={`/`} style={{ textDecoration: 'none' }}>
+                <Button variant="contained" type="button" color="defalut">
+                        뒤로가기
+                </Button>
+            </Link>
+            </div>
+          <Card props={this.props}/>
       </Container>
 
      );
   }
 }
 
-export default Home;
+export default Post;

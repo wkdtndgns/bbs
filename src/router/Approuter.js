@@ -10,8 +10,9 @@ class AppRouter extends Component{
         return (        
             <Router>
                 <div>
-                <Route exact path="/" component={Home} />
+                <Route path="/" component={Home} />
                  <Route exact path="/create" component={CreatePost} />
+                 
                  </div>
             </Router>
        
