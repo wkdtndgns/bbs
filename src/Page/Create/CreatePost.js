@@ -129,12 +129,21 @@ class CreatePost extends Component {
             event.preventDefault();
         }
         else {
-  
-            const data = JSON.stringify({  
+            // var  serialize  = require ( ' serialize-javascript ' ) ; 
+            // const data = serialize({  
+            //     "id" : this.state.postId,
+            //     "title" : this.state.title,
+            // "writer" : this.state.writer,
+            // "context": this.state.context}, {isJSON :true});
+            var serialize = require('serialize-javascript');
+
+            let data = JSON.stringify({  
                 "id" : this.state.postId,
                 "title" : this.state.title,
             "writer" : this.state.writer,
             "context": this.state.context});
+
+            console.log(serialize(data,{isJSON: true}));
 
             if(this.state.postId===0){
                 axios.post(`${URL}/CreatePostApi.php`,
