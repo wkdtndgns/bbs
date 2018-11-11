@@ -11,3 +11,8 @@ th:first-child{
     text-align: center;
     padding-left: 0px;
 }
+.reviewSuccess{
+    margin-right: 6%;
+    color: green;
+    font-size: large;
+}

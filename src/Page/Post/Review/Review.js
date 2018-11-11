@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import styled from 'styled-components';
 import queryString from 'query-string';
@@ -38,17 +37,16 @@ createMemo(){
     axios.post(`${URL}/Review/CreateReviewApi.php`,data
     ).then(response => {
         if(response.status===200){
-            alert("답변 작성에 성공했습니다.");  
-            this.props.props.history.push(`/post?id=${this.state.id}`)
-                
+            alert("답변 작성에 성공했습니다.");     
+            window.location.reload(true);
       }
       else{
           alert("오류가 발생했습니다. 답변 작성에 실패했습니다. 다시 시도해주세요.");          
         }
       });
-  
-}
 
+
+}
 
 render(){
 

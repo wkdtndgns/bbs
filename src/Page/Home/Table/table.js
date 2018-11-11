@@ -1,4 +1,3 @@
-import { createHashHistory } from 'history'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,7 +10,6 @@ import './table.css';
 import React, { Component } from 'react';
 import axios from 'axios';
 import { URL } from "../../url.js";
-import {  Router, Route } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -42,7 +40,7 @@ class SimpleTable extends Component {
 
 
   render() {
-    const { classes, indexed } = this.props;
+    const { classes } = this.props;
     
   return (
     <Paper className={classes.root}>
@@ -58,8 +56,8 @@ class SimpleTable extends Component {
         </TableHead>
         <TableBody>
           {this.state.data.map(row => {
-            return (
-          
+            if(row.reviewCount==='0'){
+              return (             
               <TableRow key={row.id} id={row.id} onClick={()=>{this.props.props.history.push(`/post?id=${row.id}`)}}>
                 <TableCell component="th" scope="row">
                   {row.title}
@@ -68,7 +66,18 @@ class SimpleTable extends Component {
                 <TableCell numeric>{row.writtenDate}</TableCell>
                 <TableCell numeric>{row.views}</TableCell>
               </TableRow>
-            );
+            );}
+            else {
+              return (  
+              <TableRow key={row.id} id={row.id} onClick={()=>{this.props.props.history.push(`/post?id=${row.id}`)}}>
+              <TableCell component="th" scope="row">
+                <span className="reviewSuccess">[답변 완료]</span>  {row.title}
+              </TableCell>
+              <TableCell numeric>{row.writer}</TableCell>
+              <TableCell numeric>{row.writtenDate}</TableCell>
+              <TableCell numeric>{row.views}</TableCell>
+              </TableRow>
+               ); }
           })}
         </TableBody>
       </Table>

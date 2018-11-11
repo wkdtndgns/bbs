@@ -88,13 +88,15 @@ class RecipeReviewCard extends React.Component {
         if(response.status===200){
           const data =response.data;          
           if(data.length===0){
+            document.querySelector(".review").innerHTML="답변이 없습니다.";
           }
           else{
           this.setState({
                 reviewList:data           
           })}
          
-              
+         this.handleExpandClick();    
+    
       }
       else{
           alert("오류가 발생했습니다. 답변 불러오기 실패했습니다. 다시 시도해주세요.");       
@@ -105,6 +107,15 @@ class RecipeReviewCard extends React.Component {
   }
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
+    if(!(this.state.reviewList.length===0)){
+      if(this.state.expanded){
+        document.querySelector(".review").innerHTML="답변 숨기기";
+      }
+      else{
+        document.querySelector(".review").innerHTML="답변 보기";
+      }
+    }
+
   };
 
   handleClickDelete(){
@@ -128,10 +139,29 @@ class RecipeReviewCard extends React.Component {
     }
 };
 
+handleClickReviewDelete(id){
+  const isDelete = window.confirm("선택하신 댓글을 삭제합니다. 계속 진행 하시겠습니까?");
+  const reviewId = JSON.stringify({  
+    "id":id});
+  console.log(id);
+  if(isDelete){
+      axios.post(`${URL}/Review/DeleteReviewApi.php`,
+      reviewId
+    ).then( response => {
+      if(response.status===200){
+          alert("댓글이 삭제되었습니다."); 
+          window.location.reload(true);         
+      }
+      else{
+          alert("오류가 발생했습니다. 댓글 삭제가 실패했습니다. 다시 시도해주세요.");       
+      }
+  });
+  }
+};
+
   render() {
     const { classes } = this.props;
     const { writtenDate, views,  writer, context, id } = this.state;
-
     return (
       <div>
       <Card className={classes.card}>
@@ -188,16 +218,26 @@ class RecipeReviewCard extends React.Component {
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnOpen>
         
             {this.state.reviewList.map(row => {
             return (
               <CardContent>
-              <Typography paragraph>답변:</Typography>
+              <Typography paragraph>답변:
+              {
+                <div className="reviewDelete" id={row.id} onClick={() => this.handleClickReviewDelete(row.id)}>
+                  <IconButton aria-label="게시물을 삭제합니다.">
+                   <RemoveIcon />
+                  </IconButton>
+                </div> 
+            }
+              </Typography>
               <Typography paragraph>
                   {row.context}
               </Typography>      
+    
             </CardContent>
+            
             );
           })}
 
