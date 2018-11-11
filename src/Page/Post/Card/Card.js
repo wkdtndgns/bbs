@@ -12,20 +12,16 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import queryString from 'query-string';
 import {withRouter, Link} from 'react-router-dom';
-import {  Router, Route } from 'react-router-dom';
 import {URL} from '../../url'
 import axios from 'axios';
 import './card.css'
 import RemoveIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import BackIcon from '@material-ui/icons/ArrowBack';
-import Paper from '../Paper/Paper';
+import Review from '../Review/Review';
 
 const styles = theme => ({
   card: {
@@ -58,7 +54,9 @@ class RecipeReviewCard extends React.Component {
   state = { expanded: false };
   constructor(props){
     super(props);
-    this.state = {  id:"0",title: "제목",context: "내용", writer: "작성자", views: "조회수", writtenDate: "작성일" };
+    this.state = {  id:"0",title: "제목",context: "내용", writer: "작성자", views: "조회수", writtenDate: "작성일" ,
+        reviewList:[],
+      };
   }
     
   componentDidMount() {
@@ -66,7 +64,7 @@ class RecipeReviewCard extends React.Component {
     const postId = JSON.stringify({  
       "id":id});
     this.setState({id:id});
-    axios.post(`${URL}/FindOnePostApi.php`,
+    axios.post(`${URL}/FindIdPostApi.php`,
         postId
       ).then( response => {
         if(response.status===200){
@@ -83,6 +81,27 @@ class RecipeReviewCard extends React.Component {
           alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");       
       }
       });
+
+      axios.post(`${URL}/Review/FindPostIdReviewApi.php`,
+      postId
+      ).then( response => {
+        if(response.status===200){
+          const data =response.data;          
+          if(data.length===0){
+          }
+          else{
+          this.setState({
+                reviewList:data           
+          })}
+         
+              
+      }
+      else{
+          alert("오류가 발생했습니다. 답변 불러오기 실패했습니다. 다시 시도해주세요.");       
+      }
+      });
+
+
   }
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
@@ -112,6 +131,7 @@ class RecipeReviewCard extends React.Component {
   render() {
     const { classes } = this.props;
     const { writtenDate, views,  writer, context, id } = this.state;
+
     return (
       <div>
       <Card className={classes.card}>
@@ -156,8 +176,7 @@ class RecipeReviewCard extends React.Component {
                 </IconButton>
               </div> 
           }
-
-            <p className="review"> 답변 보기</p>
+       <p className="review"> 답변 보기</p>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -170,25 +189,21 @@ class RecipeReviewCard extends React.Component {
           </IconButton>
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>답변:</Typography>
-            <Typography paragraph>
-                답변입니당.
-              
-             </Typography>
-    
-          </CardContent>
-          <CardContent>
-            <Typography paragraph>답변:</Typography>
-            <Typography paragraph>
-                답변입니당.
-              
-             </Typography>
-    
-          </CardContent>
+        
+            {this.state.reviewList.map(row => {
+            return (
+              <CardContent>
+              <Typography paragraph>답변:</Typography>
+              <Typography paragraph>
+                  {row.context}
+              </Typography>      
+            </CardContent>
+            );
+          })}
+
         </Collapse>
       </Card>
-      <Paper props={this.props}/>
+      <Review props={this.props}/>
 
 
       </div>

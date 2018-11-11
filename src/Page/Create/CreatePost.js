@@ -183,30 +183,30 @@ class CreatePost extends Component {
 
         return (
         <Container>
-            <div class="back">
+            <div className="back">
             <Link to={`/`} style={{ textDecoration: 'none' }}>
                 <Button variant="contained" type="button" color="default">
                         뒤로가기
                 </Button>
             </Link>
             </div>
-          <div class="form">
+          <div className="form">
           
           <form onSubmit={this.handleSubmit}>
              <h3> 게시글 { this.state.postId === 0 ? '추가' : '수정'}</h3>
                  <p> 게시판에 글을 { this.state.postId === 0 ? '추가' : '수정'} 합니다.</p>
-                 <div class ="writer">
+                 <div className ="writer">
                  <Input name="writer"  type="text"
                                 label="작성자" placeholder="작성자를 입력하세요." value={this.state.writer} onChange={this.handleChange}/>
                     </div>
-                 <div class ="title">
+                 <div className ="title">
                  <Input name="title"  type="text"
                                 label="게시물 제목" placeholder="게시물의 제목을 입력하세요."  value={this.state.title} fullWidth={true}  onChange={this.handleChange}/>
                     </div>
                     <div className="w3-container" style={{ width : window.innerWidth <= 420 ? '100%' : '80%' }}>
                      <ReactQuill name="context"  value={this.state.context} onChange={this.handleChangeContext} size={400}/>
                     </div>
-                    <div class="create">
+                    <div className="create">
                      <Button variant="contained" type="submit" color="primary" >
                             <CheckIcon/> 게시물 {(this.state.postId === 0) ? "추가" : "수정"}하기
                 </Button>

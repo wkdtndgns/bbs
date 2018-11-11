@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import PlusIcon from '@material-ui/icons/PlusOne';
 import Button from '@material-ui/core/Button';
-import queryString from 'query-string';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Card from './Card/Card.js'
-import Paper from './Paper/Paper.js'
+
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -26,7 +24,7 @@ class Post extends Component {
     return (
 
       <Container>
-            <div class="back">
+            <div className="back">
             <Link to={`/`} style={{ textDecoration: 'none' }}>
                 <Button variant="contained" type="button" color="default">
                         뒤로가기

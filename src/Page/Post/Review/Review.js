@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import styled from 'styled-components';
 import queryString from 'query-string';
@@ -38,11 +35,12 @@ createMemo(){
     "id": this.state.id,
     "context":context
     });
-    axios.post(`${URL}/CreateReviewApi.php`,data
+    axios.post(`${URL}/Review/CreateReviewApi.php`,data
     ).then(response => {
         if(response.status===200){
             alert("답변 작성에 성공했습니다.");  
-            document.getElementsByTagName("input").context.value="";
+            this.props.props.history.push(`/post?id=${this.state.id}`)
+                
       }
       else{
           alert("오류가 발생했습니다. 답변 작성에 실패했습니다. 다시 시도해주세요.");          
@@ -80,9 +78,5 @@ render(){
   );}
 
 }
-
-PaperSheet.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default PaperSheet;
