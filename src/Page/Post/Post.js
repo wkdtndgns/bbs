@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import queryString from 'query-string';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Card from './Card/Card.js'
-
+import Paper from './Paper/Paper.js'
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -22,7 +22,7 @@ class Post extends Component {
   }
 
   render() {
-    const { indexed, classes } = this.props;
+
     return (
 
       <Container>
@@ -34,6 +34,7 @@ class Post extends Component {
             </Link>
             </div>
           <Card props={this.props}/>
+       
       </Container>
 
      );

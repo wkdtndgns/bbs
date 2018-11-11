@@ -25,6 +25,7 @@ import './card.css'
 import RemoveIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import BackIcon from '@material-ui/icons/ArrowBack';
+import Paper from '../Paper/Paper';
 
 const styles = theme => ({
   card: {
@@ -110,8 +111,9 @@ class RecipeReviewCard extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { writtenDate, views,  writer, context } = this.state;
+    const { writtenDate, views,  writer, context, id } = this.state;
     return (
+      <div>
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -154,13 +156,15 @@ class RecipeReviewCard extends React.Component {
                 </IconButton>
               </div> 
           }
+
+            <p className="review"> 답변 보기</p>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
             })}
             onClick={this.handleExpandClick}
             aria-expanded={this.state.expanded}
-            aria-label="Show more"
+            aria-label="Show more"            
           >
             <ExpandMoreIcon />
           </IconButton>
@@ -172,10 +176,22 @@ class RecipeReviewCard extends React.Component {
                 답변입니당.
               
              </Typography>
-         
+    
+          </CardContent>
+          <CardContent>
+            <Typography paragraph>답변:</Typography>
+            <Typography paragraph>
+                답변입니당.
+              
+             </Typography>
+    
           </CardContent>
         </Collapse>
       </Card>
+      <Paper props={this.props}/>
+
+
+      </div>
     );
   }
 }
