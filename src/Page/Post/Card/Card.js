@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
+
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -106,15 +106,16 @@ class RecipeReviewCard extends React.Component {
 
   }
   handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
     if(!(this.state.reviewList.length===0)){
       if(this.state.expanded){
-        document.querySelector(".review").innerHTML="답변 숨기기";
-      }
-      else{
         document.querySelector(".review").innerHTML="답변 보기";
       }
+      else{
+        document.querySelector(".review").innerHTML="답변 숨기기";
+      }
     }
+
+    this.setState(state => ({ expanded: !state.expanded }));
 
   };
 
@@ -218,24 +219,24 @@ handleClickReviewDelete(id){
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnOpen>
+        <Collapse in={this.state.expanded} timeout="auto" >
         
             {this.state.reviewList.map(row => {
             return (
-              <CardContent>
-              <Typography paragraph>답변:
-              {
-                <div className="reviewDelete" id={row.id} onClick={() => this.handleClickReviewDelete(row.id)}>
-                  <IconButton aria-label="게시물을 삭제합니다.">
-                   <RemoveIcon />
-                  </IconButton>
-                </div> 
-            }
+         
+              <CardContent key={row.id}>
+              <Typography paragraph>답변:       
               </Typography>
               <Typography paragraph>
                   {row.context}
+                  <span className="reviewDelete" onClick={() => this.handleClickReviewDelete(row.id)}>
+                  답변 삭제
+                  <IconButton aria-label="게시물을 삭제합니다.">
+                   <RemoveIcon />
+                  </IconButton>
+                </span> 
               </Typography>      
-    
+              <hr/>             
             </CardContent>
             
             );
@@ -244,7 +245,6 @@ handleClickReviewDelete(id){
         </Collapse>
       </Card>
       <Review props={this.props}/>
-
 
       </div>
     );

@@ -32,8 +32,15 @@ class SimpleTable extends Component {
   
   componentDidMount() {
     axios.get(`${URL}/SelectAllPostApi.php`).then(
-      r => { this.setState({ data : r.data });
-
+      r => { 
+      
+        if(r.status===200){
+          if(r.data.length===0){
+          }
+          else{       
+            this.setState({ data : r.data });
+            }
+        }       
     }   
     )
   }

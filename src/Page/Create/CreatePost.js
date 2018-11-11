@@ -69,7 +69,7 @@ class CreatePost extends Component {
             const postId = JSON.stringify({  
                 "id":id});
 
-              axios.post(`${URL}/FindOnePostApi.php`,
+              axios.post(`${URL}/FindIdPostApi.php`,
                   postId
                 ).then( response => {
                   if(response.status===200){

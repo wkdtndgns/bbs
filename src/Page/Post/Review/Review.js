@@ -52,7 +52,7 @@ render(){
 
   return(
     <div>
-        <Post>
+        <Post key={this.state.id}>
           
         <Grid container spacing={24}>
         <Grid item xs={12} sm={10}>
