@@ -64,7 +64,7 @@ class RecipeReviewCard extends React.Component {
     const postId = JSON.stringify({  
       "id":id});
     this.setState({id:id});
-    axios.post(`${URL}/FindIdPostApi.php`,
+    axios.post(`${URL}/Post/FindIdPostApi.php`,
         postId
       ).then( response => {
         if(response.status===200){
@@ -125,7 +125,7 @@ class RecipeReviewCard extends React.Component {
       "id":this.state.id});
 
     if(isDelete){
-        axios.post(`${URL}/DeletePostApi.php`,
+        axios.post(`${URL}/Post/DeletePostApi.php`,
         postId
       ).then( response => {
         if(response.status===200){

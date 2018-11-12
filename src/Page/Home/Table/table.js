@@ -31,7 +31,7 @@ class SimpleTable extends Component {
   }
   
   componentDidMount() {
-    axios.get(`${URL}/SelectAllPostApi.php`).then(
+    axios.get(`${URL}/Post/SelectAllPostApi.php`).then(
       r => { 
       
         if(r.status===200){
@@ -40,6 +40,9 @@ class SimpleTable extends Component {
           else{       
             this.setState({ data : r.data });
             }
+        }
+        else{
+          alert("서버에서 게시글을 불러오지 못했습니다.")          
         }       
     }   
     )

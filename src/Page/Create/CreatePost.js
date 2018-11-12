@@ -4,13 +4,9 @@ import Input from '@material-ui/core/Input';
 import './Create.css'
 import axios from 'axios';
 import { URL } from "../url.js";
-import {renderQuill } from "../form_render";
-import TextField from '@material-ui/core/TextField';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import {reduxForm, Field, SubmissionError} from 'redux-form';
 import CheckIcon from '@material-ui/icons/Check';
 import Button from '@material-ui/core/Button';
-import {Create_Post} from '../../action/action_Create';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import queryString from 'query-string';
@@ -23,28 +19,6 @@ const Container = styled.div`
   flex-direction: column;
   margin:5%;
 `;
-
-function validate(title,context,writer){
-    var errors = {};
-    var hasErrors = false;
-    if(!title === ''){
-        errors.title = '게시물 제목을 입력하세요.';
-        hasErrors = true;
-    }
-
-    if(!context  === ''){
-        errors.context = '게시물 내용을 입력하세요.';
-        hasErrors = true;
-    }
-    if(!writer  === ''){
-        errors.writer = '게시물 내용을 입력하세요.';
-        hasErrors = true;
-    }
-
-    return hasErrors && errors;
-}
-
-
 
 class CreatePost extends Component {
 
@@ -69,7 +43,7 @@ class CreatePost extends Component {
             const postId = JSON.stringify({  
                 "id":id});
 
-              axios.post(`${URL}/FindIdPostApi.php`,
+              axios.post(`${URL}/Post/FindIdPostApi.php`,
                   postId
                 ).then( response => {
                   if(response.status===200){
@@ -114,6 +88,10 @@ class CreatePost extends Component {
             errors = '게시물 제목을 입력하세요.';
             hasErrors = true;
         }
+        if(this.state.title.length>50){
+            errors = '게시물 제목은 50글자 초과하면 안됩니다.';
+            hasErrors = true;
+        }
     
         if(this.state.context  === ''){
             errors = '게시물 내용을 입력하세요.';
@@ -123,19 +101,16 @@ class CreatePost extends Component {
             errors = '작성자을 입력하세요.';
             hasErrors = true;
         }
+        if(this.state.writer.length>25){
+            errors = '작성자는 25글자 초과하면 안됩니다.';
+            hasErrors = true;
+        }
 
         if(hasErrors===true){
             alert(errors);
             event.preventDefault();
         }
         else {
-            // var  serialize  = require ( ' serialize-javascript ' ) ; 
-            // const data = serialize({  
-            //     "id" : this.state.postId,
-            //     "title" : this.state.title,
-            // "writer" : this.state.writer,
-            // "context": this.state.context}, {isJSON :true});
-            var serialize = require('serialize-javascript');
 
             let data = JSON.stringify({  
                 "id" : this.state.postId,
@@ -143,10 +118,8 @@ class CreatePost extends Component {
             "writer" : this.state.writer,
             "context": this.state.context});
 
-            console.log(serialize(data,{isJSON: true}));
-
             if(this.state.postId===0){
-                axios.post(`${URL}/CreatePostApi.php`,
+                axios.post(`${URL}/Post/CreatePostApi.php`,
                 data
                 ).then( response => {
                     if(response.status===200){
@@ -162,7 +135,7 @@ class CreatePost extends Component {
             }
             
             else{
-                axios.post(`${URL}/UpdatePostApi.php`,
+                axios.post(`${URL}/Post/UpdatePostApi.php`,
                 data
                 ).then( response => {
                     if(response.status===200){
