@@ -32,17 +32,24 @@ class SimpleTable extends Component {
   
   componentDidMount() {
     axios.get(`${URL}/Post/SelectAllPostApi.php`).then(
-      r => { 
-      
-        if(r.status===200){
-          if(r.data.length===0){
+      r => {     
+        if(r.status===200){ 
+          let regx =/(Connection failed).*/;
+          var connection =regx.test(r.data);
+          if(connection){
+            alert("서버 오류 관리자에게 문의해주세요.");
           }
-          else{       
-            this.setState({ data : r.data });
+          else{
+            if(r.data.status===204){
+              alert("게시글이 없습니다."); 
             }
+            else{
+              this.setState({ data : r.data });
+            }
+           } 
         }
         else{
-          alert("서버에서 게시글을 불러오지 못했습니다.")          
+          alert("서버에서 게시글을 불러오지 못했습니다.");        
         }       
     }   
     )
@@ -79,7 +86,7 @@ class SimpleTable extends Component {
             );}
             else {
               return (  
-              <TableRow key={row.id} id={row.id} onClick={()=>{this.props.props.history.push(`/post?id=${row.id}`)}}>
+              <TableRow key={row.id} id={row.id} onClick={()=>{this.props.props.history.push(`/post?id=${row.id}`) }}>
               <TableCell component="th" scope="row">
                 <span className="reviewSuccess">[답변 완료]</span>  {row.title}
               </TableCell>

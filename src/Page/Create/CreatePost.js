@@ -12,7 +12,6 @@ import 'react-quill/dist/quill.snow.css';
 import queryString from 'query-string';
 
 const Container = styled.div`
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,16 +45,23 @@ class CreatePost extends Component {
               axios.post(`${URL}/Post/FindIdPostApi.php`,
                   postId
                 ).then( response => {
-                  if(response.status===200){
-                     const data =response.data;
+                  if(response.status===200){                        
+                        
+                    if(response.data.status===204){
+                        alert("오류가 발생했습니다. 게시글 수정이 실패했습니다. 다시 시도해주세요."); 
+                        this.props.history.push('/'); 
+                    }
+                    else{
+                    const data =response.data;
                       this.setState({
                           title : data[0].title, 
                           context : data[0].context, 
                           writer : data[0].writer                                 
-                        })
+                        })}
                 }
                 else{
-                    alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");       
+                    alert("오류가 발생했습니다. 게시글 수정이 실패했습니다. 다시 시도해주세요.");   
+                    this.props.history.push('/');    
                 }
                 });
 
@@ -122,13 +128,20 @@ class CreatePost extends Component {
                 axios.post(`${URL}/Post/CreatePostApi.php`,
                 data
                 ).then( response => {
-                    if(response.status===200){
-                        alert("게시글이 추가되었습니다."); 
-                        this.props.history.push('/')
-                            
+                    let regx =/(Connection failed).*/;
+                    var connection =regx.test(response.data);
+                    if(connection){
+                        alert("서버 오류 관리자에게 문의해주세요.");
                     }
+
                     else{
-                        alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
+                        if(response.data.status===200){
+                            alert("게시글이 추가되었습니다.");                        
+                            this.props.history.push('/');
+                        }
+                        else{
+                            alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
+                        }
                     }
                 });
                 event.preventDefault();
@@ -138,9 +151,9 @@ class CreatePost extends Component {
                 axios.post(`${URL}/Post/UpdatePostApi.php`,
                 data
                 ).then( response => {
-                    if(response.status===200){
+                    if(response.data.status===200){
                         alert("게시글이 업데이트되었습니다."); 
-                        this.props.history.push('/')                        
+                        this.props.history.push('/');                        
                     }
                     else{
                         alert("오류가 발생했습니다. 게시글 업데이트가 실패했습니다. 다시 시도해주세요.");       

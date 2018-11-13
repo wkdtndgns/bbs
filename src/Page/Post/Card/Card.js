@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -61,49 +60,61 @@ class RecipeReviewCard extends React.Component {
     
   componentDidMount() {
     const {id} = queryString.parse(this.props.props.location.search);
+
     const postId = JSON.stringify({  
       "id":id});
     this.setState({id:id});
+
     axios.post(`${URL}/Post/FindIdPostApi.php`,
         postId
       ).then( response => {
         if(response.status===200){
            const data =response.data;
-            this.setState({
+          
+           if(response.data.status===204){
+            alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");    
+            this.props.props.history.push('/');
+           }
+           else{
+           this.setState({
                 title : data[0].title, 
                 context : data[0].context, 
                 writer : data[0].writer,
                 views : data[0].views,
                 writtenDate : data[0].writtenDate                
-              })
+              });
+
+              axios.post(`${URL}/Review/FindPostIdReviewApi.php`,
+              postId
+              ).then( response => {
+                if(response.status===200){
+                  const data =response.data;     
+                  if(response.data.status===204){
+                    document.querySelector(".review").innerHTML="답변이 없습니다.";
+                   }
+          
+                else{
+                 this.setState({
+                        reviewList:data           
+                  })
+                }
+                 this.handleExpandClick();    
+            
+              }
+              else{
+                  alert("오류가 발생했습니다. 답변 불러오기 실패했습니다. 다시 시도해주세요."); 
+                  this.props.props.history.push('/');
+              }
+              });
+            }
       }
       else{
-          alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");       
+          alert("오류가 발생했습니다. 게시글 불러오기 실패했습니다. 다시 시도해주세요.");    
+          this.props.props.history.push('/');
       }
       });
 
-      axios.post(`${URL}/Review/FindPostIdReviewApi.php`,
-      postId
-      ).then( response => {
-        if(response.status===200){
-          const data =response.data;          
-          if(data.length===0){
-            document.querySelector(".review").innerHTML="답변이 없습니다.";
-          }
-          else{
-          this.setState({
-                reviewList:data           
-          })}
-         
-         this.handleExpandClick();    
-    
-      }
-      else{
-          alert("오류가 발생했습니다. 답변 불러오기 실패했습니다. 다시 시도해주세요.");       
-      }
-      });
-
-
+     
   }
   handleExpandClick = () => {
     if(!(this.state.reviewList.length===0)){
@@ -129,9 +140,13 @@ class RecipeReviewCard extends React.Component {
         postId
       ).then( response => {
         if(response.status===200){
-            alert("게시글이 삭제되었습니다."); 
-            this.props.props.history.push('/')
-                
+            if(response.data.status===200){
+              alert("게시글이 삭제되었습니다."); 
+              this.props.props.history.push('/');             
+            }
+          else{
+            alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
+          }              
         }
         else{
             alert("오류가 발생했습니다. 게시글 작성이 실패했습니다. 다시 시도해주세요.");       
@@ -144,14 +159,18 @@ handleClickReviewDelete(id){
   const isDelete = window.confirm("선택하신 댓글을 삭제합니다. 계속 진행 하시겠습니까?");
   const reviewId = JSON.stringify({  
     "id":id});
-  console.log(id);
+
   if(isDelete){
       axios.post(`${URL}/Review/DeleteReviewApi.php`,
       reviewId
     ).then( response => {
       if(response.status===200){
+        if(response.data.status===200){
           alert("댓글이 삭제되었습니다."); 
-          window.location.reload(true);         
+          window.location.reload(true);}
+          else{
+            alert("오류가 발생했습니다. 댓글 삭제가 실패했습니다. 다시 시도해주세요.");  
+          }         
       }
       else{
           alert("오류가 발생했습니다. 댓글 삭제가 실패했습니다. 다시 시도해주세요.");       
