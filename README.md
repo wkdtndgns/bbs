@@ -1,7 +1,12 @@
+## 페이지 구성 
+<https://github.com/wkdtndgns/bbs/wiki> 페이지 구성 바로가기 
+<br/><br/><br/>
+
+
+<hr/>
+
+## 실행 방법
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
 In the project directory, you can run:
 
 ### `npm start`
